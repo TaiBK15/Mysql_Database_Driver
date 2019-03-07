@@ -8,33 +8,54 @@ class MysqlQuery:
         self.database = database
         self.user = user
         self.password = password
+        self.connect = None
+        self.cursor = None
+
+    def deleteTable(self, device_tab):
+        sql_drop_tab_query = "DROP TABLE " + device_tab
+        self.cursor.execute(sql_drop_tab_query)
+        print("Delete table " + device_tab + " successfully!\n")
 
     def connectDatabase(self):
-        connection = mysql.connector.connect(host=self.host,
-                                    database=self.database,
-                                    user=self.user,
-                                    password=self.password)
-        if connection.is_connected():
-            print("Connected to MySQL database")
-            return connection
+        try:
+            self.connect = mysql.connector.connect(host=self.host,
+                                        database=self.database,
+                                        user=self.user,
+                                        password=self.password)
+            if self.connect.is_connected():
+                self.cursor = self.connect.cursor()     
+                print("Connected to MySQL database")
+        except mysql.connector.Error as error:
+            print("Failed to connect to database!")
+            
+    def insertTable(self,device_tab, data):
+        sql_insert_query = "INSERT INTO "+ device_tab + "(DATA) VALUES('" + data + "')"
+        self.cursor.execute(sql_insert_query)
+        self.connect.commit()
+        print("Insert into database successfully!")
 
-    def insertDatabase(self, conn):
-        cursor = conn.cursor()
-        cursor.execute("select database();")
-        record = cursor.fetchone()
-        print("Your connected to - ", record)
-        sql_insert_query = "INSERT INTO mqtt_data(DATA) VALUES('HELLO')"
-        cursor.execute(sql_insert_query)
-        conn.commit()
-        return cursor
+    def readAllTable(self, device_tab):
+        sql_read_all_query = "SELECT * FROM "+ device_tab + ";"
+        self.cursor.execute(sql_read_all_query)
+        records = self.cursor.fetchall()
+        for row in records:
+            print(row)
 
-    def finishConnect(self, conn, curs):
-         if(conn.is_connected()):
-              curs.close()
-              conn.close()
-              print("MySQL connection is closed")
+    def readRecentTable(self, device_tab, size_row):
+        sql_read_recent_query = "SELECT * FROM "+ device_tab + " ORDER BY TIME DESC;"
+        self.cursor.execute(sql_read_recent_query)
+        records = self.cursor.fetchmany(size_row)
+        for row in records:
+            print(row)
 
-
-# conn = connectDatabase()
-# curs = insertDatabase(conn)
-# finishConnect(conn, curs)
+    def deleteDataTable(self):
+        sql_delete_query = "TRUNCATE mqtt_data;"
+        self.cursor.execute(sql_delete_query)
+        self.connect.commit()
+        print("Delete database successfully!\n")
+ 
+    def finishConnect(self):
+        if(self.connect.is_connected()):
+              self.cursor.close()
+              self.connect.close()
+              print("MySQL connection is closed\n")

@@ -8,7 +8,15 @@ PASSWORD = '123456'
 #Create object via contructor method __init__
 mysqlQuery = MysqlQuery(HOST, DATABASE, USER, PASSWORD)
 
-#Implement query command to insert data into database
-conn = mysqlQuery.connectDatabase()
-curs = mysqlQuery.insertDatabase(conn)
-mysqlQuery.finishConnect(conn, curs)
+"""Step to implement QUERY command to MySQL database
+	1. Create MySQL database connection and cursor object to
+		perform Database Operation
+	2. Define MySQL queries such as INSERT, SELECT, DELETE
+	3. Close database connection""" 
+
+mysqlQuery.connectDatabase()
+# mysqlQuery.insertTable("mqtt_data", "hello world")
+# mysqlQuery.deleteDataTable()
+# mysqlQuery.readAllTable("mqtt_data")
+mysqlQuery.readRecentTable("mqtt_data", 2)
+mysqlQuery.finishConnect()
