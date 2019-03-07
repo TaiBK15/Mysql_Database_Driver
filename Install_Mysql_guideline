@@ -1,0 +1,22 @@
+======================================================================
+	-----------INSTALL MYSQL DATABASE SERVER------------
+				*****
+1. Install database Mysql
+  >>sudo apt-get install mysql-server
+
+2. Install driver to communicate to database mysql
+-Using 'pip' to install:
+  >>pip install mysql-connector-python
+-->Using for python 2
+  >>pip3 install mysql-connector-python
+-->Using for python 3
+
+*****************************************************
+REFERENCE WEB:
+### Communicate to database via command on terminal
+1/ http://vietjack.com/mysql/drop_database_trong_mysql.jsp
+2/ https://www.slideshare.net/DngDng16/tm-hiu-v-trin-khai-mysql-server-trn-linux-server
+
+### Communnicate to database via source code python
+1/ https://pynative.com/install-mysql-connector-python/
+2/ https://pynative.com/python-mysql-insert-data-into-database-table/
