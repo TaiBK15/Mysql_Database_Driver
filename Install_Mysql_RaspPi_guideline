@@ -1,0 +1,53 @@
+======================================================================
+	-----------INSTALL MYSQL DATABASE RASPBERRY PI 3------------
+				*****
+1. Let's install the MySQL server onto Raspberry Pi
+ >> sudo apt-get install mysql-server
+2. Can set up password in installing process or using the following command afterward (must answer 
+all the questions)
+ >> sudo mysql_secure_installation
+3. Access to database using the command:
+ >> sudo mysql -u root -p
+4.To interact with MySQL in python, install the Python bindings.
+ >>sudo apt-get install python-mysqldb
+
+======================================================================
+	-----------INSTALL PHPMyAdmin DATABASE SERVER------------
+				*****
+1. Install the PHPMyadmin onto Raspberry
+ >>sudo apt-get install phpmyadmin
+2. In install progress:
+ -Select 'apache2'
+ -Select 'yes'
+3. Configure Apache for phpMyadmin:
+-Open file: sudo nano /etc/apache2/apache2.conf
+-Add into the bottom of file:
+ "Include /etc/phpmyadmin/apache.conf"
+4. Restart the apache service, using the command:
+ >>sudo /etc/init.d/apache2 restart
+5. setup NGINX to work with phpMyAdmin all
+ >>sudo ln -s /usr/share/phpmyadmin /var/www/html
+6. Access to phpMyadmin web:
+ >>http://192.168.1.108/phpmyadmin
+
+Note: To access without username, password, edit file:
+>> sudo nano /etc/phpMyAdmin/config.inc.php
+Then:
+set "$cfg['Servers'][$i]['AllowNoPassword'] = TRUE;"
+
+-To phpMyadmin can be compatible with database MariaDB(Mysql) or controllable, we need to create new 'root' user. Because the default mysql root user have password which is empty.
+Therefore we need replace it with the same 'root' user and add new password.
++ Access to mysql, using the command:
+ >>sudo mysql -u root -p
+then, enter password rasp "raspberry"
++ After that, enter the following commands:
+ >> DROP USER 'root'@'localhost';
+ >> CREATE USER 'root'@'localhost' IDENTIFIED BY 'password';
+ >> GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost'
++ Finally, access to phpmyadmin with address:
+ "pi's address"/phpmyadmin
+****************************************************************
+PREFERENCE WEB:
+https://pimylifeup.com/raspberry-pi-mysql-phpmyadmin/
+https://howtoraspberrypi.com/how-to-install-web-server-raspberry-pi-lamp/
+
