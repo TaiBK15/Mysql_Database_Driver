@@ -6,10 +6,38 @@
 2. Can set up password in installing process or using the following command afterward (must answer 
 all the questions)
  >> sudo mysql_secure_installation
+Question & reply:
+Enter current password for root (enter for none): <enter>
+    Set root password: n
+    Remove anonymous users: n
+    Disallow root login remotely: n
+    Remove test database and access to it: n
+    Reload privilege tables now: Y
+
 3. Access to database using the command:
  >> sudo mysql -u root -p
 4.To interact with MySQL in python, install the Python bindings.
- >>sudo apt-get install python-mysqldb
+ >>sudo apt-get install python-mysqldb =====> NOT USE
+Replace with python-mysql.connector
+ >>sudo apt-get update
+ >>sudo apt-get upgrade
+ >>sudo apt-get -y install python-mysql.connector
+
+NOTE:
+1/if you want to remove the old mysql and reinstall, do the following step:
+>> sudo apt-get remove --purge mysql-server mysql-client mysql-common -y
+>> sudo apt-get autoremove -y
+>> sudo apt-get autoclean
+>> sudo apt-get remove --purge mysql*
+>> sudo apt-get remove --purge mysql
+>> sudo apt-get remove --purge mariadb
+>> sudo apt-get remove --purge mariadb*
+>> sudo apt-get --purge remove mariadb-server
+>> sudo find / -iname 'mysql*' -exec rm -rf {} \;
+2/if you want to remove python mysql connector to reinstall:
+>> sudo apt-get remove --auto-remove python-mysql.connector
+3/if you want to remove phpmyadmin:
+>> sudo apt-get autoremove phpmyadmin
 
 ======================================================================
 	-----------INSTALL PHPMyAdmin DATABASE SERVER------------
@@ -17,8 +45,28 @@ all the questions)
 1. Install the PHPMyadmin onto Raspberry
  >>sudo apt-get install phpmyadmin
 2. In install progress:
- -Select 'apache2'
- -Select 'yes'
+Configuring phpmyadmin:
+        Web server to reconfigure automatically: apache2
+        Configure database for phpmyadmin with dbconfig-common: Yes
+        MySQL application password for phpmyadmin: <blank>
+>> sudo dpkg-reconfigure phpmyadmin
+<Ok>
+Reinstall database for phpmyadmin: <Yes>
+Connection method for MySQL database server for phpmyadmin: TCP/IP
+Host name of the MySQL database server for phpmyadmin: localhost
+Port number for the MySQL service: 3306
+MySQL database name for phpmyadmin: phpmyadmin
+<Ok>
+MySQL username for phpmyadmin: root
+MySQL application password for phpmyadmin: pass  # OR ANY PASSWORD YOU WANT
+Password confirmation: pass
+Name of the database's administrative user: root
+Web server to reconfigure automatically: apache2
+An error occurred while installing the database: ignore
+Now if you try connect into phpmyadmin (localhost/phpmyadmin) using
+username: root
+password: pass
+
 3. Configure Apache for phpMyadmin:
 -Open file: sudo nano /etc/apache2/apache2.conf
 -Add into the bottom of file:
@@ -42,12 +90,15 @@ Therefore we need replace it with the same 'root' user and add new password.
 then, enter password rasp "raspberry"
 + After that, enter the following commands:
  >> DROP USER 'root'@'localhost';
- >> CREATE USER 'root'@'localhost' IDENTIFIED BY 'password';
- >> GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost'
+ >> CREATE USER 'root'@'localhost' IDENTIFIED BY 'password'
+ >> GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';
+ >> FLUSH PRIVILEGES;
 + Finally, access to phpmyadmin with address:
  "pi's address"/phpmyadmin
 ****************************************************************
 PREFERENCE WEB:
 https://pimylifeup.com/raspberry-pi-mysql-phpmyadmin/
 https://howtoraspberrypi.com/how-to-install-web-server-raspberry-pi-lamp/
+https://unix.stackexchange.com/questions/249530/mariadb-dependency-problems-leaving-unconfigured
+https://thuthuatlamweb.maytinhhtl.com/huong-dan-xu-ly-loi-mysql-va-phpmyadmin.html
 
